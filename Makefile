@@ -4,7 +4,7 @@ CFLAGS+=-std=c++0x -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX
 
 LDFLAGS+=-L./ -Lffmpeg_compiled/usr/local/lib/ -lc -lWFC -lGLESv2 -lEGL -lbcm_host -lopenmaxil -lfreetype -lz -lasound
 
-INCLUDES+=-I./ -Ilinux -Iffmpeg_compiled/usr/local/include/ -I /usr/include/dbus-1.0 -I /usr/lib/arm-linux-gnueabihf/dbus-1.0/include
+INCLUDES+=-I./ -Ilinux -Iffmpeg_compiled/usr/local/include/
 
 DIST ?= omxplayer-dist
 
@@ -52,7 +52,7 @@ version:
 	bash gen_version.sh > version.h 
 
 omxplayer.bin: version $(OBJS)
-	$(CXX) $(LDFLAGS) -o omxplayer.bin $(OBJS) -lvchiq_arm -lvchostif -lvcos -ldbus-1 -lrt -lpthread -lavutil -lavcodec -lavformat -lswscale -lswresample -lpcre
+	$(CXX) -o omxplayer.bin $(OBJS) $(LDFLAGS) -lvchiq_arm -lvchostif -lvcos -lOpenVG -ldbus-1 -lrt -lpthread -lavutil -lavcodec -lavformat -lswscale -lswresample -lpcre
 	$(STRIP) omxplayer.bin
 
 help.h: README.md Makefile
@@ -65,8 +65,8 @@ keys.h: README.md Makefile
 	> $@
 
 omxplayer.1: README.md
-	sed -e '/DOWNLOADING/,/omxplayer-dist/ d; /DBUS/,$$ d' $< >MAN
-	curl -F page=@MAN http://mantastic.herokuapp.com 2>/dev/null >$@
+# 	sed -e '/DOWNLOADING/,/omxplayer-dist/ d; /DBUS/,$$ d' $< >MAN
+# 	curl -F page=@MAN http://mantastic.herokuapp.com 2>/dev/null >$@
 
 clean:
 	for i in $(OBJS); do (if test -e "$$i"; then ( rm $$i ); fi ); done
@@ -88,6 +88,6 @@ dist: omxplayer.bin omxplayer.1
 	cp omxplayer omxplayer.bin $(DIST)/usr/bin
 	cp COPYING $(DIST)/usr/share/doc/omxplayer
 	cp README.md $(DIST)/usr/share/doc/omxplayer/README
-	cp omxplayer.1 $(DIST)/usr/share/man/man1
+# 	cp omxplayer.1 $(DIST)/usr/share/man/man1
 	cp -P ffmpeg_compiled/usr/local/lib/*.so* $(DIST)/usr/lib/omxplayer/
 	cd $(DIST); tar -czf ../$(DIST).tgz *
