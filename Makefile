@@ -65,8 +65,8 @@ keys.h: README.md Makefile
 	> $@
 
 omxplayer.1: README.md
-# 	sed -e '/DOWNLOADING/,/omxplayer-dist/ d; /DBUS/,$$ d' $< >MAN
-# 	curl -F page=@MAN http://mantastic.herokuapp.com 2>/dev/null >$@
+	sed -e '/DOWNLOADING/,/omxplayer-dist/ d; /DBUS/,$$ d' $< >MAN
+	curl -F page=@MAN http://mantastic.herokuapp.com 2>/dev/null >$@
 
 clean:
 	for i in $(OBJS); do (if test -e "$$i"; then ( rm $$i ); fi ); done
@@ -88,6 +88,6 @@ dist: omxplayer.bin omxplayer.1
 	cp omxplayer omxplayer.bin $(DIST)/usr/bin
 	cp COPYING $(DIST)/usr/share/doc/omxplayer
 	cp README.md $(DIST)/usr/share/doc/omxplayer/README
-# 	cp omxplayer.1 $(DIST)/usr/share/man/man1
+	cp omxplayer.1 $(DIST)/usr/share/man/man1
 	cp -P ffmpeg_compiled/usr/local/lib/*.so* $(DIST)/usr/lib/omxplayer/
 	cd $(DIST); tar -czf ../$(DIST).tgz *
